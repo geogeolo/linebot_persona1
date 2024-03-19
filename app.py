@@ -54,7 +54,8 @@ def handle_message(event):
     try:
         global count
         count+=1
-        ret = response['choices'][0]['message']['content'].strip()+count
+        return f"<h1> You clicked this page {count} times </h1>"
+        ret = response['choices'][0]['message']['content'].strip() + {count} 
     except:
         ret = '發生錯誤！'
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
