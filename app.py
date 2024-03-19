@@ -37,7 +37,7 @@ def callback():
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global counter
-        counter += 1
+    counter += 1
     return str(counter)
 
     text1=event.message.text
