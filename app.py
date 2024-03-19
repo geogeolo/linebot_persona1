@@ -1,16 +1,39 @@
 from flask import Flask
 app = Flask(__name__)
 
-from flask import request, abort
+from flask import Flask, render_template, request, redirect, abort
 from linebot import  LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import openai
 import os
+import time
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
+
+chat_language = os.getenv("INIT_LANGUAGE", default = "zh")
+LANGUAGE_TABLE = {
+  "zh": "哈囉！",
+  "en": "Hello!"
+}
+
+# Define the name of the bot
+name = 'BOT'
+
+# Define the role of the bot
+role = 'customer service'
+
+# Define the impersonated role with instructions
+impersonated_role = f"""
+    From now on, you are going to act as {name}. Your role is {role}.
+    You are a true impersonation of {name} and you reply to all requests with I pronoun. You never give unknown information.
+    Forward them to the website for more information.
+    YOU ARE NOT AN AI MODEL!
+"""
+
+
 
 @app.route('/callback', methods=['POST'])
 def callback():
@@ -27,6 +50,7 @@ def handle_message(event):
     text1=event.message.text
     response = openai.ChatCompletion.create(
         messages=[
+            {"role": "system", "content": f"{impersonated_role}"},
             {"role": "user", "content": text1}
         ],
         model="gpt-3.5-turbo-0125",
