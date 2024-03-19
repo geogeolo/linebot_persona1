@@ -12,6 +12,9 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
+# Initialize the message counter
+message_counter = 0
+
 # Define the position of the job
 position = 'MIS'
 
@@ -36,6 +39,8 @@ def callback():
 
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    global message_counter
+    message_counter += 1  # Increment the message counter
     text1=event.message.text
     response = openai.ChatCompletion.create(
         messages=[
@@ -49,8 +54,9 @@ def handle_message(event):
         ret = response['choices'][0]['message']['content'].strip() 
     except:
         ret = '發生錯誤！'
-        
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
+
+    ret_with_count = f"{ret}\n\nMessage Count: {message_counter}"
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=ret_with_count))
 
 if __name__ == '__main__':
     app.run()
