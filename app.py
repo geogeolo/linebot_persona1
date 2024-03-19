@@ -16,11 +16,11 @@ handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 message_counter = 0
 
 # Define the position of the job
-position = 'MIS'
+position = 'Dream Interpreter'
 
 # Define the impersonated role with instructions
 impersonated_role = f"""
-    From now on, I want you to act as a dream interpreter. 
+    From now on, I want you to act as a {position}. 
     I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. 
     Do not provide personal opinions or assumptions about the dreamer. 
     Provide only factual interpretations based on the information given.
