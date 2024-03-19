@@ -1,13 +1,15 @@
-from flask import Flask
-app = Flask(__name__)
-
-from flask import Flask, render_template, request, redirect, abort
+from flask import Flask, render_template, request, redirect, abort, jsonify
 from linebot import  LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from multiprocessing import Value
 import openai
 import os
 import time
+
+counter = Value('i', 0)
+
+app = Flask(__name__)
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
@@ -16,7 +18,7 @@ handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 # Define the position of the job
 position = 'MIS'
 
-count = 0
+
 
 
 # Define the impersonated role with instructions
@@ -52,9 +54,11 @@ def handle_message(event):
         temperature = 0.5,
     )
     try:
-        global count
-        count+=1
-        return f"<h1> You clicked this page {count} times </h1>"
+        with counter.get_lock():
+            counter.value += 1
+            out = counter.value
+        return jsonify(count=out)
+        
         ret = response['choices'][0]['message']['content'].strip() + {count} 
     except:
         ret = '發生錯誤！'
