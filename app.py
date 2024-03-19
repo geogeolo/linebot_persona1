@@ -54,15 +54,16 @@ def handle_message(event):
         temperature = 0.5,
     )
     try:
-        with counter.get_lock():
-            counter.value += 1
-            out = counter.value
-        return jsonify(count=out)
-        
-        ret = response['choices'][0]['message']['content'].strip() + {count} 
+        ret = response['choices'][0]['message']['content'].strip() 
     except:
         ret = '發生錯誤！'
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
+
+    with counter.get_lock():
+        counter.value += 1
+        out = counter.value
+    return jsonify(count=out)
+        
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret++{count}))
 
 if __name__ == '__main__':
     app.run()
