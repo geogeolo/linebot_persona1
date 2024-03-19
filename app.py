@@ -13,11 +13,6 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
-chat_language = os.getenv("INIT_LANGUAGE", default = "zh")
-LANGUAGE_TABLE = {
-  "zh": "哈囉！",
-  "en": "Hello!"
-}
 # Define the position of the job
 position = 'MIS'
 
@@ -47,7 +42,7 @@ def handle_message(event):
     text1=event.message.text
     response = openai.ChatCompletion.create(
         messages=[
-            {"role": "system", "content": f"{chat_language,impersonated_role}"},
+            {"role": "system", "content": f"Chat only in zh-TW, impersonated_role"},
             {"role": "user", "content": text1}
         ],
         model="gpt-3.5-turbo-0125",
