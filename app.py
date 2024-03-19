@@ -1,13 +1,10 @@
-from flask import Flask, render_template, request, redirect, abort, jsonify
+from flask import Flask, render_template, request, redirect, abort
 from linebot import  LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import openai
 import os
 import time
-
-from multiprocessing import Value
-counter = Value('i', 0)
 
 app = Flask(__name__)
 
@@ -28,13 +25,6 @@ impersonated_role = f"""
 """
 
 @app.route('/callback', methods=['POST'])
-def index():
-    with counter.get_lock():
-        counter.value += 1
-        out = counter.value
-
-    return jsonify(count=out)
-
 def callback():
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
