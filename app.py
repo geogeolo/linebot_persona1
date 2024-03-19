@@ -7,7 +7,7 @@ import os
 import time
 
 app = Flask(__name__)
-counter = 1
+count = 0
 openai.api_key = os.getenv('OPENAI_API_KEY')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
@@ -25,6 +25,12 @@ impersonated_role = f"""
 """
 
 @app.route('/callback', methods=['POST'])
+def home():
+    global count
+    print(count)
+    count += 1
+    return "testing"
+
 def callback():
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
@@ -36,10 +42,6 @@ def callback():
 
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global counter
-    counter += 1
-    return str(counter)
-
     text1=event.message.text
     response = openai.ChatCompletion.create(
         messages=[
