@@ -7,7 +7,7 @@ import os
 import time
 
 app = Flask(__name__)
-count = 0
+counter = 1
 openai.api_key = os.getenv('OPENAI_API_KEY')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
@@ -55,9 +55,10 @@ def handle_message(event):
     except:
         ret = '發生錯誤！'
         
-    global count
-    count+=1
-    return f"<h1> You clicked this page {count} times </h1>"
+    global counter
+    counter += 1
+    return str(counter)
+    
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
 
 if __name__ == '__main__':
