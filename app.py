@@ -16,6 +16,9 @@ handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 # Define the position of the job
 position = 'MIS'
 
+count = 0
+
+
 # Define the impersonated role with instructions
 impersonated_role = f"""
     From now on, I want you to act as a dream interpreter. 
@@ -49,7 +52,9 @@ def handle_message(event):
         temperature = 0.5,
     )
     try:
-        ret = response['choices'][0]['message']['content'].strip()
+        global count
+        count+=1
+        ret = response['choices'][0]['message']['content'].strip()+count
     except:
         ret = '發生錯誤！'
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
