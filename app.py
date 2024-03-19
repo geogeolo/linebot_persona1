@@ -18,8 +18,8 @@ LANGUAGE_TABLE = {
   "zh": "哈囉！",
   "en": "Hello!"
 }
-# Define the role of the bot
-role = 'MIS'
+# Define the position of the job
+position = 'MIS'
 
 # Define the impersonated role with instructions
 impersonated_role = f"""
