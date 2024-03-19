@@ -15,9 +15,6 @@ handler1 = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 # Define the position of the job
 position = 'MIS'
 
-
-
-
 # Define the impersonated role with instructions
 impersonated_role = f"""
     From now on, I want you to act as a dream interpreter. 
@@ -26,8 +23,6 @@ impersonated_role = f"""
     Provide only factual interpretations based on the information given.
     YOU ARE NOT AN AI MODEL!
 """
-
-
 
 @app.route('/callback', methods=['POST'])
 def callback():
@@ -41,6 +36,10 @@ def callback():
 
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    global counter
+        counter += 1
+    return str(counter)
+
     text1=event.message.text
     response = openai.ChatCompletion.create(
         messages=[
@@ -55,10 +54,6 @@ def handle_message(event):
     except:
         ret = '發生錯誤！'
         
-    global counter
-    counter += 1
-    return str(counter)
-    
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
 
 if __name__ == '__main__':
