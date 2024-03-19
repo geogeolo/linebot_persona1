@@ -1,13 +1,10 @@
-from flask import Flask, render_template, request, redirect, abort, jsonify
+from flask import Flask, render_template, request, redirect, abort
 from linebot import  LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from multiprocessing import Value
 import openai
 import os
 import time
-
-counter = Value('i', 0)
 
 app = Flask(__name__)
 
@@ -57,13 +54,8 @@ def handle_message(event):
         ret = response['choices'][0]['message']['content'].strip() 
     except:
         ret = '發生錯誤！'
-
-    with counter.get_lock():
-        counter.value += 1
-        out = counter.value
-    return jsonify(count=out)
-        
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret++{count}))
+   
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=ret))
 
 if __name__ == '__main__':
     app.run()
