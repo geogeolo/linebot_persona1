@@ -42,7 +42,7 @@ def handle_message(event):
     text1=event.message.text
     response = openai.ChatCompletion.create(
         messages=[
-            {"role": "system", "content": f"Chat only in zh-TW, impersonated_role"},
+            {"role": "system", "content": f"Chat only in zh-TW, {impersonated_role}"},
             {"role": "user", "content": text1}
         ],
         model="gpt-3.5-turbo-0125",
